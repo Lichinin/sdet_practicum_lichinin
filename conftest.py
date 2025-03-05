@@ -80,7 +80,8 @@ def browser(request, logger) -> WebDriver:
     yield driver
     driver.quit()
 
+
 @pytest.fixture()
-def open_forms_page(browser) -> FormsPage:
+def forms_page(browser) -> FormsPage:
     browser.get(f'{browser.url}/form-fields/')
     return FormsPage(browser)

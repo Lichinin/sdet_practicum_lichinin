@@ -1,4 +1,5 @@
 import time
+
 import allure
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -27,7 +28,7 @@ class BasePage:
             self.logger.exception('Error: element not found!')
             raise
 
-    @allure.step('Поиск элементов на странице')
+    @allure.step('Поиск нескольких элементов на странице')
     def get_elements(self, locator: tuple, timeout=3):
         with allure.step(f'Поиск элементов "{locator}"'):
             self.browser.logger.info(f'* Get elements {repr(locator)}')
@@ -35,13 +36,19 @@ class BasePage:
                 EC.visibility_of_all_elements_located(locator)
             )
 
+    @allure.step('Прокрутка страницы до элемента')
     def scroll_to_element(self, element):
-        self.browser.execute_script(
-            "arguments[0].scrollIntoView({block: 'center'});",
-            element
-        )
-        time.sleep(0.5)
+        try:
+            self.browser.execute_script(
+                "arguments[0].scrollIntoView({block: 'center'});",
+                element
+            )
+            time.sleep(0.5)
+        except Exception as e:
+            self.logger.error(f"Ошибка прокрутки элемента: {e}")
+            raise
 
+    @allure.step('Проверка равенства значений')
     def assert_equals(self, expected, actual):
         self.logger.info('* Check assertion assert_equals')
         try:
@@ -57,3 +64,19 @@ class BasePage:
             )
             self.logger.exception('!!! Test failed !!!')
             raise
+
+    @allure.step('Клик по полю и его очистка')
+    def click_and_clear(self, field, scroll_first=False):
+        if scroll_first:
+            self.scroll_to_element(field)
+        try:
+            field.click()
+            field.clear()
+        except Exception as e:
+            self.logger.error(f"Ошибка при клике и очистке элемента: {e}")
+            allure.attach(
+                name="failure_screenshot",
+                body=self.browser.get_screenshot_as_png(),
+                attachment_type=allure.attachment_type.PNG
+            )
+            self.logger.exception('Error: cannot click and clear!')
