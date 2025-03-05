@@ -1,7 +1,5 @@
 from selenium.webdriver.common.by import By
 
-# from constants.constants import Constans
-
 
 class Selectors:
 

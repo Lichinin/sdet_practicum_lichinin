@@ -71,7 +71,6 @@ def browser(request, logger) -> WebDriver:
         raise ValueError(
             'Browser name must be "chrome", "firefox" or "edge"'
         )
-    # driver.get(url)
     driver.url = url
     driver.logger = logger
     driver.test_name = request.node.name

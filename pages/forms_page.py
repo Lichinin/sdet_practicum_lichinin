@@ -3,7 +3,7 @@ import time
 
 import allure
 
-# from constants.constants import Constans
+from constants.constants import Constants
 from locators.locators import Selectors
 from pages.base_page import BasePage
 
@@ -14,13 +14,13 @@ class FormsPage(BasePage):
         field = self.get_element(Selectors.FIELD_NAME)
         field.click()
         field.clear()
-        field.send_keys('name')
+        field.send_keys(Constants.NAME)
 
     def fill_field_password(self):
         field = self.get_element(Selectors.FIELD_PASSWORD)
         field.click()
         field.clear()
-        field.send_keys('password')
+        field.send_keys(Constants.PASSWORD)
 
     def check_drink_milk(self):
         self.get_element(Selectors.CHECKBOX_MILK).click()
@@ -52,7 +52,7 @@ class FormsPage(BasePage):
         time.sleep(0.5)
         field.click()
         field.clear()
-        field.send_keys('email@mail.ru')
+        field.send_keys(Constants.EMAIL)
 
     def fill_field_message(self):
         tools = self.get_elements(Selectors.AUTOMATION_TOOLS)
