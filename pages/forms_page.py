@@ -30,11 +30,7 @@ class FormsPage(BasePage):
 
     def check_color_yellow(self):
         element = self.get_element(Selectors.RADIO_COLOR_YELLOW)
-        self.browser.execute_script(
-            "arguments[0].scrollIntoView({block: 'center'});",
-            element
-        )
-        time.sleep(0.5)
+        self.scroll_to_element(element)
         element.click()
 
     def choice_like_automation(self):
@@ -45,11 +41,7 @@ class FormsPage(BasePage):
 
     def fill_field_email(self):
         field = self.get_element(Selectors.FIELD_EMAIL)
-        self.browser.execute_script(
-            "arguments[0].scrollIntoView({block: 'center'});",
-            field
-        )
-        time.sleep(0.5)
+        self.scroll_to_element(field)
         field.click()
         field.clear()
         field.send_keys(Constants.EMAIL)
@@ -60,11 +52,7 @@ class FormsPage(BasePage):
         tools_name = [tool.text for tool in tools]
         longer_tool = max(tools_name, key=len)
         message_field = self.get_element(Selectors.FIELD_MESSAGE)
-        self.browser.execute_script(
-            "arguments[0].scrollIntoView({block: 'center'});",
-            message_field
-        )
-        time.sleep(0.5)
+        self.scroll_to_element(message_field)
         message_field.click()
         message_field.clear()
         message_field.send_keys(number_of_tools)
@@ -73,13 +61,10 @@ class FormsPage(BasePage):
 
     def click_button_submit(self):
         button = self.get_element(Selectors.BUTTON_SUBMIT)
-        self.browser.execute_script(
-            "arguments[0].scrollIntoView({block: 'center'});",
-            button
-        )
+        self.scroll_to_element(button)
         button.click()
 
     def assert_successfull_message_creation(self):
         alert = self.browser.switch_to.alert
         message = alert.text
-        self.assert_equals('Message received!', message)
+        self.assert_equals(Constants.EXCEPTED_FORM_MESSAGE, message)

@@ -1,3 +1,4 @@
+import time
 import allure
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -33,6 +34,13 @@ class BasePage:
             return WebDriverWait(self.browser, timeout).until(
                 EC.visibility_of_all_elements_located(locator)
             )
+
+    def scroll_to_element(self, element):
+        self.browser.execute_script(
+            "arguments[0].scrollIntoView({block: 'center'});",
+            element
+        )
+        time.sleep(0.5)
 
     def assert_equals(self, expected, actual):
         self.logger.info('* Check assertion assert_equals')
