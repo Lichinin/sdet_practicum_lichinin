@@ -31,10 +31,19 @@ class BasePage:
     @allure.step('Поиск нескольких элементов на странице')
     def get_elements(self, locator: tuple, timeout=3):
         with allure.step(f'Поиск элементов "{locator}"'):
-            self.browser.logger.info(f'* Get elements {repr(locator)}')
-            return WebDriverWait(self.browser, timeout).until(
-                EC.visibility_of_all_elements_located(locator)
-            )
+            try:
+                self.browser.logger.info(f'* Get elements {repr(locator)}')
+                return WebDriverWait(self.browser, timeout).until(
+                    EC.visibility_of_all_elements_located(locator)
+                )
+            except Exception:
+                allure.attach(
+                    name="failure_screenshot",
+                    body=self.browser.get_screenshot_as_png(),
+                    attachment_type=allure.attachment_type.PNG
+                )
+            self.logger.exception('Error: elements not found!')
+            raise
 
     @allure.step('Прокрутка страницы до элемента')
     def scroll_to_element(self, element):
@@ -45,7 +54,12 @@ class BasePage:
             )
             time.sleep(0.5)
         except Exception as e:
-            self.logger.error(f"Ошибка прокрутки элемента: {e}")
+            allure.attach(
+                name="failure_screenshot",
+                body=self.browser.get_screenshot_as_png(),
+                attachment_type=allure.attachment_type.PNG
+            )
+            self.logger.error(f'Ошибка прокрутки элемента: {e}')
             raise
 
     @allure.step('Проверка равенства значений')
@@ -56,12 +70,13 @@ class BasePage:
                 f"Expected: '{expected}', Actual: '{actual}'"
             )
             self.logger.info('*** Test completed successful ***')
-        except AssertionError:
+        except AssertionError as e:
             allure.attach(
                 name="failure_screenshot",
                 body=self.browser.get_screenshot_as_png(),
                 attachment_type=allure.attachment_type.PNG
             )
+            self.logger.exception(f'Error: {e}')
             self.logger.exception('!!! Test failed !!!')
             raise
 

@@ -6,6 +6,7 @@ from constants.constants import Constants
 @allure.epic('SimbirSoft SDET practicum')
 @allure.suite('UI tests')
 @allure.title('Тест заполнения форм')
+@allure.description('Проверка заполнения всех полей формы и сообщения об успешной отправке.')
 def test_form_filling(forms_page):
     page = forms_page
     page.fill_field_name(Constants.NAME)

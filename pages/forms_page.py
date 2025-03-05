@@ -37,9 +37,11 @@ class FormsPage(BasePage):
 
     @allure.step('Выбор случайного варианта "Do you like automation?"')
     def choice_like_automation(self):
-        options = self.get_elements(Selectors.OPTIONS_AUTOMATIONS)
-        valid_options = [option for option in options if option.get_attribute("value") != "default"]
-        random_option = random.choice(valid_options)
+        with allure.step('Поиск всех возможных непустых вариантов заполнения'):
+            options = self.get_elements(Selectors.OPTIONS_AUTOMATIONS)
+            valid_options = [option for option in options if option.get_attribute("value") != "default"]
+        with allure.step('Выбор случайного значения из найденных вариантов'):
+            random_option = random.choice(valid_options)
         random_option.click()
 
     @allure.step('Заполнение поля "Email" значением "{email}"')
