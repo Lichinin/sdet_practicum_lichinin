@@ -8,10 +8,12 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.remote.webdriver import WebDriver
 
+from pages.forms_page import FormsPage
+
 
 def pytest_addoption(parser):
-    parser.addoption('--browser', action='store', default='firefox')
-    parser.addoption('--url', action='store', default='е https://practice-automation.com')
+    parser.addoption('--browser', action='store', default='chrome')
+    parser.addoption('--url', action='store', default='https://practice-automation.com')
     parser.addoption('--log_level', action='store', default="INFO")
     parser.addoption('--browser_version', action='store')
 
@@ -50,7 +52,8 @@ def browser(request, logger) -> WebDriver:
 
     if browser_name == 'chrome':
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless=new")
+        # options.add_argument("--headless=new")
+        options.page_load_strategy = 'eager'
         driver = webdriver.Chrome(options=options)
     elif browser_name == 'firefox':
         options = webdriver.FirefoxOptions()
@@ -68,7 +71,7 @@ def browser(request, logger) -> WebDriver:
         raise ValueError(
             'Browser name must be "chrome", "firefox" or "edge"'
         )
-    driver.get(url)
+    # driver.get(url)
     driver.url = url
     driver.logger = logger
     driver.test_name = request.node.name
@@ -78,3 +81,7 @@ def browser(request, logger) -> WebDriver:
     yield driver
     driver.quit()
 
+@pytest.fixture()
+def open_forms_page(browser) -> FormsPage:
+    browser.get(f'{browser.url}/form-fields/')
+    return FormsPage(browser)
