@@ -77,3 +77,4 @@ def browser(request, logger) -> WebDriver:
 
     yield driver
     driver.quit()
+
