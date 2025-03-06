@@ -168,7 +168,10 @@ tests/test_ui/test_form_filling.py::test_form_filling PASSED                    
 
 ### Примеры отчетности Allure.
 * Summary по тестам:
+![image](https://github.com/user-attachments/assets/e98d6d16-9d41-4356-9080-030bd71bfa41)
 
 * Тесткейсы:
+![image](https://github.com/user-attachments/assets/e43db7b3-2982-4759-b92b-5642eb7197f6)
 
 * Пример отчета по тесткейсу:
+![image](https://github.com/user-attachments/assets/317abf7e-72e3-4c18-a9ce-4caa2edf9f36)
