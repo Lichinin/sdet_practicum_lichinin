@@ -71,6 +71,14 @@ class FormsPage(BasePage):
 
     @allure.step("Проверка сообщения успешной отправки формы через alert")
     def assert_successfull_message_creation(self):
-        alert = self.browser.switch_to.alert
-        message = alert.text
+        try:
+            alert = self.browser.switch_to.alert
+            message = alert.text
+        except Exception as e:
+            self.logger.error(f"Ошибка при работе с alert: {e}")
+            allure.attach(
+                name="failure_screenshot",
+                body=self.browser.get_screenshot_as_png(),
+                attachment_type=allure.attachment_type.PNG
+            )
         self.assert_equals(Constants.EXCEPTED_FORM_MESSAGE, message)
